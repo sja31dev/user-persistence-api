@@ -1,0 +1,142 @@
+{
+	"variables": [],
+	"info": {
+		"name": "User Persistence API",
+		"_postman_id": "ba497298-a70e-cf66-7d54-82278cabe56c",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create user",
+			"request": {
+				"url": "http://localhost:5000/api/user",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"me@here.com\",\n\t\"forename\": \"Me\",\n\t\"surname\": \"Me\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update user",
+			"request": {
+				"url": {
+					"raw": "http://localhost:5000/api/user?id=5a08c40624007423d03d767b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "5a08c40624007423d03d767b",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"forename\": \"You\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get user",
+			"request": {
+				"url": {
+					"raw": "http://localhost:5000/api/user?id=5a08c40624007423d03d767b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "5a08c40624007423d03d767b",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"request": {
+				"url": {
+					"raw": "http://localhost:5000/api/user?id=5a08c40624007423d03d767b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "5a08c40624007423d03d767b",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"forename\": \"You\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

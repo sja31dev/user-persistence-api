@@ -97,11 +97,7 @@ Request: Empty
 Result body:
 ```json
 {
-    "id": ID,
-    "email": "email address",
-    "forename": "Forename",
-    "Surname": "Surname",
-    "created": "Creation Date and time"
+    "message": "User deleted"
 }
 ```
 for the deleted user

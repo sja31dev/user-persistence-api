@@ -4,7 +4,7 @@
   "description": "A user persistence API",
   "main": "server.js",
   "scripts": {
-    "start": "SET NODE_ENV=dev && node server.js",
+    "start": "SET NODE_ENV=dev&& node server.js",
     "test": "mocha --timeout 10000"
   },
   "repository": {
