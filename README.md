@@ -26,7 +26,7 @@ Request Body:
 Result body:
 ```json
 {
-    "id": ID,
+    "id": "ID",
     "email": "email address",
     "forename": "Forename",
     "Surname": "Surname",
@@ -48,7 +48,7 @@ Request Body: Empty
 Result body:
 ```json
 {
-    "id": ID,
+    "id": "ID",
     "email": "email address",
     "forename": "Forename",
     "Surname": "Surname",
@@ -76,7 +76,7 @@ Request Body, any subset of:
 Result body:
 ```json
 {
-    "id": ID,
+    "id": "ID",
     "email": "email address",
     "forename": "Forename",
     "Surname": "Surname",
