@@ -4,9 +4,13 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const config = require('config');
 
-const user = require('./controllers/routes/user');
+// Get process.env from .env file if it exists
+require('dotenv').config();
 
-const port = 5000; // Could be in a .env file and load with dotenv package
+// Set port to use if env doesnt set one
+const port = process.env.PORT || 5000;
+
+const user = require('./controllers/routes/user');
 
 const app = express();
 
