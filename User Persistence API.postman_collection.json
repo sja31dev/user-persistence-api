@@ -137,6 +137,48 @@
 				"description": ""
 			},
 			"response": []
+		},
+		{
+			"name": "Get user(email)",
+			"request": {
+				"url": {
+					"raw": "http://localhost:5000/api/user?id=me@here.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "me@here.com",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get users",
+			"request": {
+				"url": "http://localhost:5000/api/user",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }

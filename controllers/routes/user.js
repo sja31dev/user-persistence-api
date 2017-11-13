@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+var Isemail = require('isemail');
+
 const User = require('../models/user');
 
 function makeJsonResponse(user) {
@@ -13,14 +15,19 @@ function makeJsonResponse(user) {
 
 // POST a new user
 function postUser(req, res) {
-  var newUser = new User(req.body);
-  newUser.save((err, user) => {
-    if (err) {
-      res.json({"error": err});
-    } else {
-      res.json(makeJsonResponse(user));
-    }
-  });
+  if (req.body.email && !Isemail.validate(req.body.email))
+  {
+    res.json({"error": "Invalid email address"});
+  } else {
+    var newUser = new User(req.body);
+    newUser.save((err, user) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(makeJsonResponse(user));
+      }
+    });
+  }
 }
 
 // GET a users
@@ -28,7 +35,7 @@ function getUser(req, res) {
   if (req.query.id) {
     User.findById(req.query.id, (err, user) => {
       if (err) {
-        res.json({"error": err});
+        res.json(err);
       } else {
         res.json(makeJsonResponse(user));
       }
@@ -36,13 +43,20 @@ function getUser(req, res) {
   } else if (req.query.email) {
     User.findOne({"email": req.query.email}, (err, user) => {
       if (err) {
-        res.json({"error": err});
+        res.json(err);
       } else {
         res.json(makeJsonResponse(user));
       }
     });
   } else {
-    res.json({"error": "Get should specify an id or email"});
+    // Get all users
+    User.find({}, (err, users) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(users.map((user) => { return makeJsonResponse(user); }));
+      }
+    });
   }
 }
 
@@ -51,16 +65,19 @@ function updateUser(req, res) {
   if (req.query.id) {
     User.findById({_id: req.query.id}, (err, user) => {
       if (err) {
-        res.json({"error": err});
+        res.json(err);
       } else {
-        Object.assign(user, req.body).save((err, user) => {
-          if (err) {
-            res.json({"error": err});
-          } else {
-            res.json({"message": "User updated", user});
-          }
-        });
-
+        if(user) {
+          Object.assign(user, req.body).save((err, user) => {
+            if (err) {
+              res.json(err);
+            } else {
+              res.json(makeJsonResponse(user));
+            }
+          });
+        } else {
+          res.json({"error": "User not found"});
+        }
       }
     });
   } else {
@@ -73,7 +90,7 @@ function deleteUser(req, res) {
   if (req.query.id) {
     User.remove({_id : req.query.id}, (err, result) => {
       if (err) {
-        res.json({"error": err});
+        res.json(err);
       } else {
         res.json({"message": "User deleted"});
       }
