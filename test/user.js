@@ -113,6 +113,28 @@ describe('Users', () => {
 
   // Test post
   describe('/POST user', () => {
+    it('it should not POST a user with same email as existing user', (done) => {
+      let user = new User({
+        "email": "john@smith.com",
+        "forename": "John",
+        "surname": "Smith"
+      });
+      user.save((err, user) => {
+        chai.request(server)
+            .post('/api/user')
+            .send(user)
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.have.property('error').eql('User with that email address already exisis');
+              done();
+        });
+      });
+    });
+  });
+
+  // Test post
+  describe('/POST user', () => {
     it('it should POST a user', (done) => {
       const user = {
         "email": "john@smith.com",
@@ -186,6 +208,28 @@ describe('Users', () => {
     });
   });
 
+  // Test get email
+  describe('/GET/?email user', () => {
+    it('it should not GET a user given the email with invalid email address', (done) => {
+      let user = new User({
+        "email": "Invalid email address",
+        "forename": "John",
+        "surname": "Smith"
+      });
+      user.save((err, user) => {
+        chai.request(server)
+            .get('/api/user/?email=' + user.email)
+            .send(user)
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.have.property('error').eql('Invalid email address');
+              done();
+        });
+      });
+    });
+  });
+
   // Test update user
   describe('/PUT/?id user', () => {
     it('it should UPDATE a user given the id', (done) => {
@@ -202,6 +246,56 @@ describe('Users', () => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
                 res.body.should.have.property('email').eql("john@smith.co.uk");
+                done();
+          });
+      });
+    });
+  });
+
+  // Test update user
+  describe('/PUT/?id user', () => {
+    it('it should not UPDATE a user given the id if the email address is invalid', (done) => {
+      let user = new User({
+        "email": "john@smith.co.uk",
+        "forename": "John",
+        "surname": "Smith"
+      });
+      user.save((err, user) => {
+          chai.request(server)
+              .put('/api/user/?id=' + user.id)
+              .send({"email":"Invalid email address"})
+              .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('error').eql('Invalid email address');
+                done();
+          });
+      });
+    });
+  });
+
+  // Test update user
+  describe('/PUT/?id user', () => {
+    it('it should not UPDATE a user given the id if the new email address already exists', (done) => {
+      let user = new User({
+        "email": "john@smith.com",
+        "forename": "John",
+        "surname": "Smith"
+      });
+      let user2 = new User({
+        "email": "john.smith@smith.com",
+        "forename": "John",
+        "surname": "Smith"
+      });
+      user2.save();
+      user.save((err, user) => {
+          chai.request(server)
+              .put('/api/user/?id=' + user.id)
+              .send({"email":"john.smith@smith.com"})
+              .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('error').eql('User with that email address already exisis');
                 done();
           });
       });

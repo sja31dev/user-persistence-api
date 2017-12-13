@@ -15,16 +15,30 @@ function makeJsonResponse(user) {
 
 // POST a new user
 function postUser(req, res) {
-  if (req.body.email && !Isemail.validate(req.body.email))
-  {
+  if (req.body.email && !Isemail.validate(req.body.email)) {
     res.json({"error": "Invalid email address"});
   } else {
-    var newUser = new User(req.body);
-    newUser.save((err, user) => {
+    var newUser = new User({
+      "email": req.body.email,
+      "forename": req.body.forename,
+      "surname": req.body.surname
+    });
+    // Check if user with that email address already exisis
+    User.findOne({"email": req.body.email}, (err, user) => {
       if (err) {
         res.json(err);
       } else {
-        res.json(makeJsonResponse(user));
+        if (user) {
+          res.json({"error": "User with that email address already exisis"});
+        } else {
+          newUser.save((err, user) => {
+            if (err) {
+              res.json(err);
+            } else {
+              res.json(makeJsonResponse(user));
+            }
+          });
+        }
       }
     });
   }
@@ -41,13 +55,17 @@ function getUser(req, res) {
       }
     });
   } else if (req.query.email) {
-    User.findOne({"email": req.query.email}, (err, user) => {
-      if (err) {
-        res.json(err);
-      } else {
-        res.json(makeJsonResponse(user));
-      }
-    });
+    if (!Isemail.validate(req.query.email)) {
+      res.json({"error": "Invalid email address"});
+    } else {
+      User.findOne({"email": req.query.email}, (err, user) => {
+        if (err) {
+          res.json(err);
+        } else {
+          res.json(makeJsonResponse(user));
+        }
+      });
+    }
   } else {
     // Get all users
     User.find({}, (err, users) => {
@@ -60,21 +78,37 @@ function getUser(req, res) {
   }
 }
 
-// PUT an updte to a user
+// PUT an update to a user
 function updateUser(req, res) {
   if (req.query.id) {
-    User.findById({_id: req.query.id}, (err, user) => {
+    User.findById({_id: req.query.id}, (err, updateUser) => {
       if (err) {
         res.json(err);
       } else {
-        if(user) {
-          Object.assign(user, req.body).save((err, user) => {
-            if (err) {
-              res.json(err);
-            } else {
-              res.json(makeJsonResponse(user));
-            }
-          });
+        if (updateUser) {
+          console.log(req.body);
+          if (req.body.email && !Isemail.validate(req.body.email)) {
+            res.json({"error": "Invalid email address"});
+          } else {
+            // Check if user with that email address already exisis
+            User.findOne({"email": req.body.email}, (err, user) => {
+              if (err) {
+                res.json(err);
+              } else {
+                if (user) {
+                  res.json({"error": "User with that email address already exisis"});
+                } else {
+                  Object.assign(updateUser, req.body).save((err, updateUser) => {
+                    if (err) {
+                      res.json(err);
+                    } else {
+                      res.json(makeJsonResponse(updateUser));
+                    }
+                  });
+                }
+              }
+            });
+          }
         } else {
           res.json({"error": "User not found"});
         }

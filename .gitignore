@@ -2,3 +2,5 @@
 node_modules
 # Ignore .env frile
 .env
+# Ignore config directory
+config
